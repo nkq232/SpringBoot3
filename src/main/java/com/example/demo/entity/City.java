@@ -18,9 +18,20 @@ public class City {
     @Column(name = "Name")
     private String cityName;
 
+    @Column(name = "CountryCode")
+    private String cityCountryCode;
+
     @Column(name = "District")
     private String cityDistrict;
 
     @Column(name = "Population")
     private long cityPopulation;
+
+    public City(int cityID, String cityName, String cityCountryCode, String cityDistrict, long cityPopulation) {
+        this.cityID = cityID;
+        this.cityName = cityName;
+        this.cityCountryCode = cityCountryCode;
+        this.cityDistrict = cityDistrict;
+        this.cityPopulation = cityPopulation;
+    }
 }
