@@ -1,12 +1,15 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name="city")
 public class City {
 
@@ -18,9 +21,20 @@ public class City {
     @Column(name = "Name")
     private String cityName;
 
+    @Column(name = "CountryCode")
+    private String cityCountryCode;
+
     @Column(name = "District")
     private String cityDistrict;
 
     @Column(name = "Population")
     private long cityPopulation;
+
+    public City(int cityID, String cityName, String cityCountryCode, String cityDistrict, long cityPopulation) {
+        this.cityID = cityID;
+        this.cityName = cityName;
+        this.cityCountryCode = cityCountryCode;
+        this.cityDistrict = cityDistrict;
+        this.cityPopulation = cityPopulation;
+    }
 }
