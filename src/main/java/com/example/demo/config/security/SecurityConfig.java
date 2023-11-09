@@ -1,11 +1,7 @@
 package com.example.demo.config.security;
 
 import com.example.demo.filter.JwtAuthFilter;
-import com.example.demo.service.UserService;
 import com.example.demo.service.impl.AuthService;
-import jakarta.servlet.Filter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,20 +17,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-
-import javax.sql.DataSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@NoArgsConstructor
 public class SecurityConfig {
 
     @Autowired
@@ -45,21 +35,22 @@ public class SecurityConfig {
         return new AuthService();
     }
 
-    private LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(config ->
-                        config.requestMatchers("/authentication").permitAll()
+                        config
+                                .requestMatchers("/auth/getToken").permitAll()
+                                .requestMatchers("/user/**").hasAnyAuthority("ADMIN")
+                                .requestMatchers("/user/active").hasAnyAuthority("MANAGER", "ADMIN")
+                                .requestMatchers("/city").hasAnyAuthority("EMPLOYEE", "MANAGER", "ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore((Filter) authFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout ->
-                        logout
-                                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext())));
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 //                .logout(logout ->
 //                        logout.logoutUrl("api/v1/auth/logout")
 //                                .addLogoutHandler(logoutHandler)
@@ -67,19 +58,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests(config ->
-//                config
-//                        .requestMatchers(HttpMethod.GET, "/cities").hasAuthority("ADMIN")
-//                        .requestMatchers(HttpMethod.GET, "/cities/**").hasAuthority("ADMIN")
-//                        .requestMatchers(HttpMethod.PUT, "/cities/**").hasAuthority("ADMIN")
-//                        .anyRequest().authenticated()
-//        );
-//        http.httpBasic(Customizer.withDefaults());
-//        http.csrf(AbstractHttpConfigurer::disable);
-//        return http.build();
-//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

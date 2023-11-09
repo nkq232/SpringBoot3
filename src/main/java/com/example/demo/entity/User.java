@@ -7,12 +7,10 @@ import lombok.*;
 @Setter
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name="user")
 public class User {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
 
@@ -35,7 +33,17 @@ public class User {
     @Column(name="active")
     private int active;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="authority_id")
     private Authority authority;
+
+    public User(String username, String password, String firstName, String lastName, String email, int active, Authority authority) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.active = active;
+        this.authority = authority;
+    }
 }

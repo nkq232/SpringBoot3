@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
 @Setter
-public class AuthorityDTO {
-    private int id;
-    private String role;
+@AllArgsConstructor
+public class AuthResponse {
+    private String jwtToken;
+    private String authority;
 }

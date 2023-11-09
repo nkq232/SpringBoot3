@@ -17,7 +17,7 @@ import java.util.function.Function;
 import io.jsonwebtoken.Jwts;
 @Component
 public class JwtServiceImpl implements JwtService {
-    public static final String SECRET = "NTM2NzU2NkI1OTcwMzM3MzM2NzYzOTc5MkY0MjNGNDUyODQ4MkI0RDYyNTE2NTU0Njg1NzZENUE3MTM0NzQzNw==";
+    public static final String SECRET = "13213726354654765493543564354645678564567654567586785645645765432";
     @Override
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -29,7 +29,7 @@ public class JwtServiceImpl implements JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 60))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
