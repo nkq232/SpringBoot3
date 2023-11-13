@@ -14,6 +14,7 @@ public class CityMapper {
     }
 
     public static CityDTO toDTO(City entity) {
+        if(entity == null) return null;
         return new CityDTO(entity.getCityID(), entity.getCityName(), entity.getCityCountryCode()
                 , entity.getCityDistrict(), entity.getCityPopulation());
     }

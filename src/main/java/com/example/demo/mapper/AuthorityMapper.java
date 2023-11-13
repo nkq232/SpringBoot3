@@ -4,7 +4,7 @@ import com.example.demo.dto.AuthorityDTO;
 import com.example.demo.entity.Authority;
 
 public class AuthorityMapper {
-    Authority toEntity(AuthorityDTO dto) {
+    public Authority toEntity(AuthorityDTO dto) {
         return new Authority(dto.getId(), dto.getRole());
     }
 
