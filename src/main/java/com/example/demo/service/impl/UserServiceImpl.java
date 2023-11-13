@@ -62,9 +62,6 @@ public class UserServiceImpl implements UserService {
         user.setEmail(objectNode.get("email").asText());
         user.setFirstName(objectNode.get("firstName").asText());
         user.setLastName(objectNode.get("lastName").asText());
-        AuthorityMapper authorityMapper = new AuthorityMapper();
-        user.setAuthority(authorityMapper.toEntity(new ObjectMapper()
-                .readValue(objectNode.get("AuthorityDTO").asText(), AuthorityDTO.class)));
         this.userRepository.save(user);
         return UserMapper.toDTO(user);
     }
